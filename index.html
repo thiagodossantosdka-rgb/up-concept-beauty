@@ -170,6 +170,9 @@
          Momento B: três universos (Hair · Make · Nail)
          ========================================================== -->
     <section class="hero" id="hero" aria-labelledby="hero-titulo">
+      <!-- Trilho do scroll da hero: no celular o palco fica "sticky" aqui dentro
+           (rolagem nativa do navegador, sem saltos); no desktop o GSAP fixa a hero -->
+      <div class="hero-track">
       <div class="hero-stage">
 
         <!-- Mídia: vídeo + fallback animado (o fallback fica por baixo e
@@ -243,6 +246,7 @@
           </div>
         </div>
       </div>
+      </div><!-- /.hero-track -->
 
       <!-- Momento B — os três universos -->
       <div class="universes" role="region" aria-label="Nossos universos">

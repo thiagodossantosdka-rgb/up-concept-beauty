@@ -257,8 +257,11 @@
     }
 
     function layoutUP() {
-      var w = stage.clientWidth, h = stage.clientHeight;
-      geo.w = w; geo.h = h;
+      var w = stage.clientWidth, hPalco = stage.clientHeight;
+      geo.w = w; geo.h = hPalco;          // o viewBox usa o palco inteiro
+      // No celular o palco tem 100lvh (pode passar por baixo da barra do navegador):
+      // centraliza o logo na parte realmente visível
+      var h = Math.min(hPalco, window.innerHeight || hPalco);
       svg.setAttribute('preserveAspectRatio', 'none');
 
       var alturaHeader = $('.site-header').offsetHeight;
@@ -325,29 +328,44 @@
         mobile: '(max-width: 1023px), (hover: none)'
       }, function (c) {
         var desktop = c.conditions.desktop;
-        if (desktop) hero.classList.add('is-cinematic');
+        var trilho = $('.hero-track', hero);
+        // Desktop: GSAP fixa a hero (pin). Celular: palco "sticky" nativo (sem saltos
+        // quando a barra do navegador aparece/some) e o GSAP só lê o scroll.
+        hero.classList.add(desktop ? 'is-cinematic' : 'is-sticky');
+        layoutUP(); // o palco pode ter mudado de altura com a classe
 
         var tl = gsap.timeline({
           defaults: { ease: 'none' },
-          scrollTrigger: {
+          scrollTrigger: desktop ? {
             trigger: hero,
             start: 'top top',
-            end: desktop ? '+=200%' : '+=120%',
-            pin: desktop ? hero : stage,
+            end: '+=200%',
+            pin: hero,
             scrub: 0.8,
             anticipatePin: 1,
             invalidateOnRefresh: true
+          } : {
+            trigger: trilho,
+            start: 'top top',
+            end: 'bottom bottom',
+            scrub: 0.5,
+            invalidateOnRefresh: true,
+            // Ao soltar o dedo no meio do caminho, desliza suavemente até o
+            // início, o título ou o fim (no sentido em que a pessoa rolava)
+            snap: { snapTo: 'labelsDirectional', duration: { min: 0.25, max: 0.7 }, delay: 0.05, ease: 'power2.inOut' }
           }
         });
 
         // Momento A — zoom para dentro das letras
-        tl.to(intro, { autoAlpha: 0, y: -30, duration: 0.6 }, 0)
+        tl.addLabel('inicio', 0)
+          .to(intro, { autoAlpha: 0, y: -30, duration: 0.6 }, 0)
           .to(shineMark, { autoAlpha: 0, duration: 0.3 }, 0)      // menos coisa para redesenhar no zoom
           .to(zoom, { p: 1, duration: 3, ease: 'power1.in', onUpdate: aplicarZoom }, 0)
-          .to(svg, { autoAlpha: 0, duration: 0.7 }, 2.3)        // invisível = o navegador para de desenhar a máscara           // garante tela 100% vídeo
+          .to(svg, { autoAlpha: 0, duration: 0.7 }, 2.3)        // invisível = o navegador para de desenhar a máscara
           .to(shade, { opacity: 1, duration: 1 }, 2.5)
           .fromTo(conteudo, { autoAlpha: 0, y: 40 },
-            { autoAlpha: 1, y: 0, stagger: 0.3, duration: 1, ease: 'power2.out' }, 2.9);
+            { autoAlpha: 1, y: 0, stagger: 0.3, duration: 1, ease: 'power2.out' }, 2.9)
+          .addLabel('titulo');
 
         if (desktop) {
           // pausa com o título na tela, depois Momento B
@@ -357,16 +375,42 @@
             .fromTo($$('.universe-img', hero), { scale: 1.25 },
               { scale: 1.04, stagger: 0.35, duration: 2, ease: 'power2.out', clearProps: 'transform' }, 6.3)
             .to({}, { duration: 0.4 }); // respiro final antes de soltar o pin
-        } else {
-          tl.to({}, { duration: 1.2 }); // segura o título um pouco no celular
-          // Mobile: cards entram com um deslize simples
-          gsap.from(paineis, {
-            autoAlpha: 0, x: 60, stagger: 0.12, duration: 0.9, ease: 'power3.out',
-            scrollTrigger: { trigger: '.universes', start: 'top 80%' }
-          });
+          return function () { hero.classList.remove('is-cinematic'); };
         }
 
-        return function () { hero.classList.remove('is-cinematic'); };
+        tl.to({}, { duration: 1.2 }).addLabel('fim'); // segura o título um pouco no celular
+        // Cards dos universos entram com um deslize simples
+        gsap.from(paineis, {
+          autoAlpha: 0, x: 60, stagger: 0.12, duration: 0.9, ease: 'power3.out',
+          scrollTrigger: { trigger: '.universes', start: 'top 80%' }
+        });
+
+        /* Trava suave no título: mesmo com um arraste rápido, a rolagem para
+           em "Sua beleza, elevada." uma vez. O próximo arraste segue normal.
+           Rearma quando a pessoa volta para o começo da hero. */
+        var st = tl.scrollTrigger;
+        var ultimo = window.scrollY, travando = false, jaParou = false;
+        function aoRolar() {
+          var y = window.scrollY;
+          var alvo = st.labelToScroll('titulo');
+          if (!travando && !jaParou && ultimo < alvo - 2 && y > alvo + 2) travar(alvo);
+          if (y < alvo - window.innerHeight * 0.6) jaParou = false;
+          ultimo = y;
+        }
+        function travar(alvo) {
+          travando = true;
+          jaParou = true;
+          root.style.overflow = 'hidden';            // corta a inércia do arraste
+          window.scrollTo({ top: alvo, behavior: 'instant' });
+          setTimeout(function () { root.style.overflow = ''; travando = false; }, 550);
+        }
+        window.addEventListener('scroll', aoRolar, { passive: true });
+
+        return function () {
+          window.removeEventListener('scroll', aoRolar);
+          root.style.overflow = '';
+          hero.classList.remove('is-sticky');
+        };
       });
     }
 
@@ -406,6 +450,24 @@
         layoutUP();
         ScrollTrigger.refresh();
       }, 200);
+    });
+  }
+
+  /* ---------------------------------------------------------------------
+     ÂNCORAS — rolagem suave dos links internos (#servicos, #contato…)
+     Feita em JS porque scroll-behavior: smooth no CSS atrapalha o snap da hero.
+     --------------------------------------------------------------------- */
+  function initAncoras() {
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest('a[href^="#"]');
+      if (!a || e.defaultPrevented) return;
+      var hash = a.getAttribute('href');
+      if (hash.length < 2 || /^#servicos-/.test(hash)) return;
+      var alvo = document.getElementById(hash.slice(1));
+      if (!alvo) return;
+      e.preventDefault();
+      alvo.scrollIntoView({ behavior: reduzMovimento ? 'auto' : 'smooth' });
+      history.replaceState(null, '', hash);
     });
   }
 
@@ -957,6 +1019,7 @@
   initMenuMobile();
   initHero();
   initHashCategoria();
+  initAncoras();
   initMarquee();
   initServicos();
   initAntesDepois();

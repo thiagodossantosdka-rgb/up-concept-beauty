@@ -62,7 +62,8 @@ html {
   -webkit-text-size-adjust: 100%;
   scroll-padding-top: var(--header-h);
 }
-html.motion { scroll-behavior: smooth; }
+/* Sem scroll-behavior: smooth no CSS: ele briga com o snap do ScrollTrigger.
+   A rolagem suave dos links internos é feita em main.js (initAncoras). */
 
 body {
   margin: 0;
@@ -74,6 +75,7 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+  overflow-x: clip; /* clip não cria contêiner de rolagem: o position: sticky da hero funciona */
 }
 body.is-locked { overflow: hidden; }
 
@@ -385,6 +387,13 @@ html:not(.motion) .site-header { /* sem animação a hero já começa escura: he
   width: 100%;
   height: 100%;
 }
+
+/* Celular: palco "sticky" dentro de um trilho alto (classe aplicada por JS).
+   O trilho tem 100lvh do palco + 120svh de rolagem para a animação.
+   lvh = altura com a barra do navegador recolhida: o palco nunca deixa uma faixa vazia. */
+.hero.is-sticky .hero-track { position: relative; height: calc(100vh + 120svh); height: calc(100lvh + 120svh); }
+.hero.is-sticky .hero-stage { position: sticky; top: 0; height: 100vh; height: 100lvh; }
+.hero.is-sticky .scroll-hint { bottom: calc(var(--space-6) + 100lvh - 100svh); }
 
 .hero-video {
   object-fit: cover;
