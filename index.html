@@ -31,7 +31,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,600;0,900;1,400;1,600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,600;0,900;1,400;1,600&amp;family=Jost:wght@300;400;500&amp;display=swap">
 
   <link rel="stylesheet" href="assets/css/style.css">
 
@@ -106,10 +106,9 @@
         <stop offset="1" stop-color="#A86F58"/>
       </linearGradient>
       <symbol id="up-mark" viewBox="-10 -12 330 236">
-        <g fill="none" stroke="url(#roseMetal)" stroke-width="14">
+        <g fill="none" stroke="url(#roseMetal)" stroke-width="14" stroke-linejoin="round">
           <path d="M0 0V125A76.5 85 0 0 0 153 125"/>
-          <path d="M153 -4V210"/>
-          <path d="M153 0H225A75 63.5 0 0 1 225 127"/>
+          <path d="M153 210V0H225A75 63.5 0 0 1 225 127"/>
         </g>
       </symbol>
     </defs>
@@ -176,7 +175,7 @@
         <!-- Mídia: vídeo + fallback animado (o fallback fica por baixo e
              aparece sempre que o vídeo não existir ou não carregar) -->
         <div class="hero-media" aria-hidden="true">
-          <div class="hero-fallback"></div>
+          <div class="hero-fallback"><span class="hero-glitter"></span></div>
           <!-- Troque assets/video/hero.mp4 pelo vídeo real das transformações
                (ideal: 1920x1080, 10–20s, H.264, sem áudio, até ~4 MB) -->
           <video class="hero-video" muted loop playsinline preload="metadata"
@@ -197,10 +196,9 @@
             <mask id="upMask" maskUnits="userSpaceOnUse">
               <rect x="-50000" y="-50000" width="100000" height="100000" fill="#fff"/>
               <g class="up-mark mask-mark" fill="none" stroke="#000" stroke-width="14"
-                 stroke-dasharray="1 1" stroke-dashoffset="1" filter="url(#upBlur)">
+                 stroke-linejoin="round" stroke-dasharray="1 1" stroke-dashoffset="1" filter="url(#upBlur)">
                 <path pathLength="1" d="M0 0V125A76.5 85 0 0 0 153 125"/>
-                <path pathLength="1" d="M153 -4V210"/>
-                <path pathLength="1" d="M153 0H225A75 63.5 0 0 1 225 127"/>
+                <path pathLength="1" d="M153 210V0H225A75 63.5 0 0 1 225 127"/>
               </g>
             </mask>
             <!-- Brilho rose gold que atravessa o monograma (coordenadas do monograma) -->
@@ -211,10 +209,9 @@
             </linearGradient>
           </defs>
           <rect class="mask-fill" x="-50000" y="-50000" width="100000" height="100000" mask="url(#upMask)"/>
-          <g class="up-mark shine-mark" fill="none" stroke="url(#upShine)" stroke-width="14">
+          <g class="up-mark shine-mark" fill="none" stroke="url(#upShine)" stroke-width="14" stroke-linejoin="round">
             <path d="M0 0V125A76.5 85 0 0 0 153 125"/>
-            <path d="M153 -4V210"/>
-            <path d="M153 0H225A75 63.5 0 0 1 225 127"/>
+            <path d="M153 210V0H225A75 63.5 0 0 1 225 127"/>
           </g>
         </svg>
 
@@ -248,7 +245,7 @@
       </div>
 
       <!-- Momento B — os três universos -->
-      <div class="universes" aria-label="Nossos universos">
+      <div class="universes" role="region" aria-label="Nossos universos">
         <article class="universe" data-categoria="hair" tabindex="-1">
           <img class="universe-img" src="assets/img/panel-hair.webp" alt="" width="900" height="1400"
                loading="lazy" decoding="async" data-placeholder="foto de cabelo (Hair)">
@@ -283,15 +280,449 @@
     </section>
 
     <!-- ==========================================================
-         SEÇÕES 3 a 8 — próxima etapa (estruturas provisórias para
-         as âncoras do menu funcionarem durante a prévia da hero)
+         3. FAIXA DE DESTAQUES (letreiro infinito)
+         Ajuste os itens à lista real de serviços do salão.
+         O conteúdo é duplicado por JS para o loop ficar contínuo.
          ========================================================== -->
-    <section class="section stub" id="servicos"><div class="container"><p class="eyebrow">Em construção</p><h2 class="section-title">Nossos serviços</h2></div></section>
-    <section class="section stub alt" id="portfolio"><div class="container"><h2 class="section-title">Transformações</h2></div></section>
-    <section class="section stub" id="espaco"><div class="container"><h2 class="section-title">O espaço</h2></div></section>
-    <section class="section stub alt" id="depoimentos"><div class="container"><h2 class="section-title">Depoimentos</h2></div></section>
-    <section class="section stub" id="contato"><div class="container"><h2 class="section-title">Agende seu momento.</h2></div></section>
+    <div class="marquee" aria-label="Serviços em destaque">
+      <div class="marquee-track">
+        <ul class="marquee-list">
+          <li>Corte</li><li>Coloração</li><li>Mechas</li><li>Escova</li><li>Tratamentos</li>
+          <li>Maquiagem social</li><li>Manicure</li><li>Pedicure</li><li>Alongamento</li><li>Nail art</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ==========================================================
+         4. SERVIÇOS E PREÇOS
+         ========================================================== -->
+    <section class="section servicos" id="servicos" aria-labelledby="servicos-titulo">
+      <div class="container">
+        <header class="section-head" data-reveal>
+          <p class="eyebrow">Serviços e valores</p>
+          <h2 class="section-title" id="servicos-titulo">Nossos <em>serviços</em></h2>
+          <p class="section-lead">Escolha a categoria, conheça os serviços e agende direto pelo WhatsApp.</p>
+        </header>
+
+        <div class="tabs" role="tablist" aria-label="Categorias de serviço">
+          <button class="tab" role="tab" type="button" id="tab-hair" aria-controls="painel-hair" aria-selected="true" data-categoria="hair">Cabelo</button>
+          <button class="tab" role="tab" type="button" id="tab-make" aria-controls="painel-make" aria-selected="false" tabindex="-1" data-categoria="make">Maquiagem</button>
+          <button class="tab" role="tab" type="button" id="tab-nail" aria-controls="painel-nail" aria-selected="false" tabindex="-1" data-categoria="nail">Unhas</button>
+          <span class="tab-indicator" aria-hidden="true"></span>
+        </div>
+
+        <!-- [PLACEHOLDER: lista de serviços, descrições, durações e preços — validar tudo com o salão] -->
+        <div class="tab-panels" data-placeholder="lista de serviços, durações e preços a validar com o salão">
+
+          <div class="tab-panel" role="tabpanel" id="painel-hair" aria-labelledby="tab-hair" data-categoria="hair" tabindex="0">
+            <article class="service-card">
+              <h3>Corte feminino</h3>
+              <p>Corte pensado para o seu rosto, textura e rotina, com finalização.</p>
+              <dl class="service-meta"><div><dt>Duração</dt><dd>~1h</dd></div><div><dt>Valor</dt><dd>a partir de R$ <span data-placeholder="preço">[PLACEHOLDER]</span></dd></div></dl>
+              <a class="btn btn-outline btn-sm" data-wa="servico" data-servico="Corte feminino" href="https://wa.me/5561984021530" target="_blank" rel="noopener">Agendar este serviço</a>
+            </article>
+            <article class="service-card">
+              <h3>Escova</h3>
+              <p>Escova modelada, lisa ou com movimento, para o dia a dia ou para eventos.</p>
+              <dl class="service-meta"><div><dt>Duração</dt><dd>~45 min</dd></div><div><dt>Valor</dt><dd>a partir de R$ <span data-placeholder="preço">[PLACEHOLDER]</span></dd></div></dl>
+              <a class="btn btn-outline btn-sm" data-wa="servico" data-servico="Escova" href="https://wa.me/5561984021530" target="_blank" rel="noopener">Agendar este serviço</a>
+            </article>
+            <article class="service-card">
+              <h3>Coloração</h3>
+              <p>Cor uniforme, retoque de raiz ou mudança completa, com produtos profissionais.</p>
+              <dl class="service-meta"><div><dt>Duração</dt><dd>~2h</dd></div><div><dt>Valor</dt><dd>a partir de R$ <span data-placeholder="preço">[PLACEHOLDER]</span></dd></div></dl>
+              <a class="btn btn-outline btn-sm" data-wa="servico" data-servico="Coloração" href="https://wa.me/5561984021530" target="_blank" rel="noopener">Agendar este serviço</a>
+            </article>
+            <article class="service-card">
+              <h3>Mechas e luzes</h3>
+              <p>Morena iluminada, loiro, babylights e contornos de luz feitos sob medida.</p>
+              <dl class="service-meta"><div><dt>Duração</dt><dd>3h a 4h</dd></div><div><dt>Valor</dt><dd>a partir de R$ <span data-placeholder="preço">[PLACEHOLDER]</span></dd></div></dl>
+              <a class="btn btn-outline btn-sm" data-wa="servico" data-servico="Mechas e luzes" href="https://wa.me/5561984021530" target="_blank" rel="noopener">Agendar este serviço</a>
+            </article>
+            <article class="service-card">
+              <h3>Hidratação e reconstrução</h3>
+              <p>Tratamentos para devolver brilho, maciez e força aos fios.</p>
+              <dl class="service-meta"><div><dt>Duração</dt><dd>~1h</dd></div><div><dt>Valor</dt><dd>a partir de R$ <span data-placeholder="preço">[PLACEHOLDER]</span></dd></div></dl>
+              <a class="btn btn-outline btn-sm" data-wa="servico" data-servico="Hidratação e reconstrução" href="https://wa.me/5561984021530" target="_blank" rel="noopener">Agendar este serviço</a>
+            </article>
+            <article class="service-card">
+              <h3>Progressiva</h3>
+              <p>Alinhamento e redução de volume com acabamento natural.</p>
+              <dl class="service-meta"><div><dt>Duração</dt><dd>~3h</dd></div><div><dt>Valor</dt><dd>a partir de R$ <span data-placeholder="preço">[PLACEHOLDER]</span></dd></div></dl>
+              <a class="btn btn-outline btn-sm" data-wa="servico" data-servico="Progressiva" href="https://wa.me/5561984021530" target="_blank" rel="noopener">Agendar este serviço</a>
+            </article>
+          </div>
+
+          <div class="tab-panel" role="tabpanel" id="painel-make" aria-labelledby="tab-make" data-categoria="make" tabindex="0" hidden>
+            <article class="service-card">
+              <h3>Maquiagem social</h3>
+              <p>Make leve e luminosa para jantares, aniversários e encontros.</p>
+              <dl class="service-meta"><div><dt>Duração</dt><dd>~1h</dd></div><div><dt>Valor</dt><dd>a partir de R$ <span data-placeholder="preço">[PLACEHOLDER]</span></dd></div></dl>
+              <a class="btn btn-outline btn-sm" data-wa="servico" data-servico="Maquiagem social" href="https://wa.me/5561984021530" target="_blank" rel="noopener">Agendar este serviço</a>
+            </article>
+            <article class="service-card">
+              <h3>Maquiagem para eventos</h3>
+              <p>Formaturas, casamentos e festas: alta fixação e acabamento para fotos.</p>
+              <dl class="service-meta"><div><dt>Duração</dt><dd>~1h30</dd></div><div><dt>Valor</dt><dd>a partir de R$ <span data-placeholder="preço">[PLACEHOLDER]</span></dd></div></dl>
+              <a class="btn btn-outline btn-sm" data-wa="servico" data-servico="Maquiagem para eventos" href="https://wa.me/5561984021530" target="_blank" rel="noopener">Agendar este serviço</a>
+            </article>
+            <article class="service-card">
+              <h3>Design de sobrancelha</h3>
+              <p>Desenho personalizado que valoriza o olhar, com ou sem henna.</p>
+              <dl class="service-meta"><div><dt>Duração</dt><dd>~40 min</dd></div><div><dt>Valor</dt><dd>a partir de R$ <span data-placeholder="preço">[PLACEHOLDER]</span></dd></div></dl>
+              <a class="btn btn-outline btn-sm" data-wa="servico" data-servico="Design de sobrancelha" href="https://wa.me/5561984021530" target="_blank" rel="noopener">Agendar este serviço</a>
+            </article>
+          </div>
+
+          <div class="tab-panel" role="tabpanel" id="painel-nail" aria-labelledby="tab-nail" data-categoria="nail" tabindex="0" hidden>
+            <article class="service-card">
+              <h3>Manicure</h3>
+              <p>Cutilagem cuidadosa e esmaltação impecável.</p>
+              <dl class="service-meta"><div><dt>Duração</dt><dd>~40 min</dd></div><div><dt>Valor</dt><dd>a partir de R$ <span data-placeholder="preço">[PLACEHOLDER]</span></dd></div></dl>
+              <a class="btn btn-outline btn-sm" data-wa="servico" data-servico="Manicure" href="https://wa.me/5561984021530" target="_blank" rel="noopener">Agendar este serviço</a>
+            </article>
+            <article class="service-card">
+              <h3>Pedicure</h3>
+              <p>Pés bem cuidados, com hidratação e acabamento caprichado.</p>
+              <dl class="service-meta"><div><dt>Duração</dt><dd>~50 min</dd></div><div><dt>Valor</dt><dd>a partir de R$ <span data-placeholder="preço">[PLACEHOLDER]</span></dd></div></dl>
+              <a class="btn btn-outline btn-sm" data-wa="servico" data-servico="Pedicure" href="https://wa.me/5561984021530" target="_blank" rel="noopener">Agendar este serviço</a>
+            </article>
+            <article class="service-card">
+              <h3>Esmaltação em gel</h3>
+              <p>Brilho intenso e durabilidade de semanas, sem lascar.</p>
+              <dl class="service-meta"><div><dt>Duração</dt><dd>~1h</dd></div><div><dt>Valor</dt><dd>a partir de R$ <span data-placeholder="preço">[PLACEHOLDER]</span></dd></div></dl>
+              <a class="btn btn-outline btn-sm" data-wa="servico" data-servico="Esmaltação em gel" href="https://wa.me/5561984021530" target="_blank" rel="noopener">Agendar este serviço</a>
+            </article>
+            <article class="service-card">
+              <h3>Alongamento</h3>
+              <p>Unhas alongadas em gel ou fibra, no formato e tamanho que você quiser.</p>
+              <dl class="service-meta"><div><dt>Duração</dt><dd>~2h</dd></div><div><dt>Valor</dt><dd>a partir de R$ <span data-placeholder="preço">[PLACEHOLDER]</span></dd></div></dl>
+              <a class="btn btn-outline btn-sm" data-wa="servico" data-servico="Alongamento" href="https://wa.me/5561984021530" target="_blank" rel="noopener">Agendar este serviço</a>
+            </article>
+            <article class="service-card">
+              <h3>Nail art</h3>
+              <p>Decorações delicadas ou marcantes para deixar as unhas com a sua cara.</p>
+              <dl class="service-meta"><div><dt>Duração</dt><dd>+30 min</dd></div><div><dt>Valor</dt><dd>a partir de R$ <span data-placeholder="preço">[PLACEHOLDER]</span></dd></div></dl>
+              <a class="btn btn-outline btn-sm" data-wa="servico" data-servico="Nail art" href="https://wa.me/5561984021530" target="_blank" rel="noopener">Agendar este serviço</a>
+            </article>
+          </div>
+        </div>
+        <p class="placeholder-note">Lista de serviços, durações e valores ilustrativa: <span data-placeholder="validação com o salão">[PLACEHOLDER: validar com o salão]</span></p>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         5. PORTFÓLIO — antes e depois + galeria
+         ========================================================== -->
+    <section class="section alt portfolio" id="portfolio" aria-labelledby="portfolio-titulo">
+      <div class="container">
+        <header class="section-head" data-reveal>
+          <p class="eyebrow">Portfólio</p>
+          <h2 class="section-title" id="portfolio-titulo"><em>Transformações</em></h2>
+          <p class="section-lead">Arraste a barra para comparar o antes e o depois.</p>
+        </header>
+
+        <!-- Os pares de antes/depois ficam em main.js → PARES_ANTES_DEPOIS -->
+        <div class="ba" data-reveal>
+          <div class="ba-frame" style="--pos: 50%">
+            <img class="ba-after" src="assets/img/depois-1.webp" alt="Depois: [PLACEHOLDER: descrição da transformação 1]"
+                 width="1200" height="900" loading="lazy" decoding="async" data-placeholder="foto depois 1">
+            <img class="ba-before" src="assets/img/antes-1.webp" alt="Antes: [PLACEHOLDER: descrição da transformação 1]"
+                 width="1200" height="900" loading="lazy" decoding="async" data-placeholder="foto antes 1">
+            <span class="ba-label ba-label-before" aria-hidden="true">Antes</span>
+            <span class="ba-label ba-label-after" aria-hidden="true">Depois</span>
+            <div class="ba-handle" role="slider" tabindex="0" aria-label="Comparar antes e depois"
+                 aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-valuetext="50% mostrando o antes">
+              <span class="ba-knob" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="22" height="22"><path d="M9 6l-6 6 6 6M15 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+            </div>
+          </div>
+          <div class="ba-nav">
+            <button class="icon-btn ba-prev" type="button" aria-label="Transformação anterior">
+              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </button>
+            <p class="ba-caption" aria-live="polite"><span class="ba-count">01 / 03</span><span class="ba-title" data-placeholder="descrição da transformação">[PLACEHOLDER: Coloração · descrição]</span></p>
+            <button class="icon-btn ba-next" type="button" aria-label="Próxima transformação">
+              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <h3 class="sub-title" data-reveal>Galeria</h3>
+        <div class="filters" role="group" aria-label="Filtrar galeria por categoria">
+          <button class="filter" type="button" aria-pressed="true" data-filtro="todos">Todos</button>
+          <button class="filter" type="button" aria-pressed="false" data-filtro="hair">Cabelo</button>
+          <button class="filter" type="button" aria-pressed="false" data-filtro="make">Maquiagem</button>
+          <button class="filter" type="button" aria-pressed="false" data-filtro="nail">Unhas</button>
+        </div>
+
+        <!-- Troque as imagens em assets/img/galeria-*.webp (mantenha width/height reais) -->
+        <ul class="gallery">
+          <li class="gallery-item" data-categoria="hair"><button class="gallery-btn" type="button"><img src="assets/img/galeria-hair-1.webp" alt="[PLACEHOLDER: foto de cabelo 1]" width="800" height="1000" loading="lazy" decoding="async" data-placeholder="foto de cabelo"></button></li>
+          <li class="gallery-item" data-categoria="make"><button class="gallery-btn" type="button"><img src="assets/img/galeria-make-1.webp" alt="[PLACEHOLDER: foto de maquiagem 1]" width="800" height="1200" loading="lazy" decoding="async" data-placeholder="foto de maquiagem"></button></li>
+          <li class="gallery-item" data-categoria="nail"><button class="gallery-btn" type="button"><img src="assets/img/galeria-nail-1.webp" alt="[PLACEHOLDER: foto de unhas 1]" width="800" height="800" loading="lazy" decoding="async" data-placeholder="foto de unhas"></button></li>
+          <li class="gallery-item" data-categoria="hair"><button class="gallery-btn" type="button"><img src="assets/img/galeria-hair-2.webp" alt="[PLACEHOLDER: foto de cabelo 2]" width="800" height="800" loading="lazy" decoding="async" data-placeholder="foto de cabelo"></button></li>
+          <li class="gallery-item" data-categoria="nail"><button class="gallery-btn" type="button"><img src="assets/img/galeria-nail-2.webp" alt="[PLACEHOLDER: foto de unhas 2]" width="800" height="1200" loading="lazy" decoding="async" data-placeholder="foto de unhas"></button></li>
+          <li class="gallery-item" data-categoria="make"><button class="gallery-btn" type="button"><img src="assets/img/galeria-make-2.webp" alt="[PLACEHOLDER: foto de maquiagem 2]" width="800" height="1000" loading="lazy" decoding="async" data-placeholder="foto de maquiagem"></button></li>
+          <li class="gallery-item" data-categoria="hair"><button class="gallery-btn" type="button"><img src="assets/img/galeria-hair-3.webp" alt="[PLACEHOLDER: foto de cabelo 3]" width="800" height="1200" loading="lazy" decoding="async" data-placeholder="foto de cabelo"></button></li>
+          <li class="gallery-item" data-categoria="nail"><button class="gallery-btn" type="button"><img src="assets/img/galeria-nail-3.webp" alt="[PLACEHOLDER: foto de unhas 3]" width="800" height="1000" loading="lazy" decoding="async" data-placeholder="foto de unhas"></button></li>
+          <li class="gallery-item" data-categoria="make"><button class="gallery-btn" type="button"><img src="assets/img/galeria-make-3.webp" alt="[PLACEHOLDER: foto de maquiagem 3]" width="800" height="800" loading="lazy" decoding="async" data-placeholder="foto de maquiagem"></button></li>
+        </ul>
+
+        <div class="center" data-reveal>
+          <a class="btn btn-outline" href="https://www.instagram.com/upconceptbeauty/" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor"/></svg>
+            Ver mais no Instagram
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         6. O ESPAÇO E A EQUIPE
+         ========================================================== -->
+    <section class="section espaco" id="espaco" aria-labelledby="espaco-titulo">
+      <div class="container espaco-grid">
+        <div class="espaco-texto" data-reveal>
+          <p class="eyebrow">O espaço</p>
+          <h2 class="section-title" id="espaco-titulo">Um lugar para <em>elevar</em> você.</h2>
+          <p>O nome diz tudo: <strong>UP</strong> é a ideia de elevar. Elevar a autoestima, a confiança e a beleza que já existe em cada cliente que passa pela nossa porta.</p>
+          <p>Aqui, cabelo, maquiagem e unhas se encontram em um só lugar, no Taquari, com tempo para ouvir o que você quer e cuidado em cada detalhe. Você entra para um serviço e sai se sentindo outra.</p>
+          <p class="placeholder-text" data-placeholder="história do salão / da fundadora">[PLACEHOLDER: um parágrafo sobre a história do salão ou da fundadora]</p>
+        </div>
+        <div class="espaco-fotos" aria-hidden="false">
+          <figure class="arch arch-lg" data-parallax="-50">
+            <img src="assets/img/espaco-1.webp" alt="[PLACEHOLDER: foto do salão — recepção]" width="800" height="1100" loading="lazy" decoding="async" data-placeholder="foto do espaço 1">
+          </figure>
+          <figure class="arch arch-sm" data-parallax="50">
+            <img src="assets/img/espaco-2.webp" alt="[PLACEHOLDER: foto do salão — estações de atendimento]" width="800" height="1100" loading="lazy" decoding="async" data-placeholder="foto do espaço 2">
+          </figure>
+        </div>
+      </div>
+
+      <div class="container equipe">
+        <h3 class="sub-title" data-reveal>Nossa equipe</h3>
+        <ul class="team" data-placeholder="equipe: fotos, nomes, especialidades e Instagram">
+          <li class="team-card" data-reveal>
+            <figure class="arch"><img src="assets/img/equipe-1.webp" alt="[PLACEHOLDER: foto da profissional 1]" width="600" height="760" loading="lazy" decoding="async"></figure>
+            <h4>[PLACEHOLDER: Nome]</h4>
+            <p class="team-role">Hair stylist · [PLACEHOLDER: especialidade]</p>
+            <a class="team-ig" href="https://www.instagram.com/upconceptbeauty/" target="_blank" rel="noopener" data-placeholder="@ da profissional">@[PLACEHOLDER]</a>
+          </li>
+          <li class="team-card" data-reveal>
+            <figure class="arch"><img src="assets/img/equipe-2.webp" alt="[PLACEHOLDER: foto da profissional 2]" width="600" height="760" loading="lazy" decoding="async"></figure>
+            <h4>[PLACEHOLDER: Nome]</h4>
+            <p class="team-role">Maquiadora · [PLACEHOLDER: especialidade]</p>
+            <a class="team-ig" href="https://www.instagram.com/upconceptbeauty/" target="_blank" rel="noopener" data-placeholder="@ da profissional">@[PLACEHOLDER]</a>
+          </li>
+          <li class="team-card" data-reveal>
+            <figure class="arch"><img src="assets/img/equipe-3.webp" alt="[PLACEHOLDER: foto da profissional 3]" width="600" height="760" loading="lazy" decoding="async"></figure>
+            <h4>[PLACEHOLDER: Nome]</h4>
+            <p class="team-role">Nail designer · [PLACEHOLDER: especialidade]</p>
+            <a class="team-ig" href="https://www.instagram.com/upconceptbeauty/" target="_blank" rel="noopener" data-placeholder="@ da profissional">@[PLACEHOLDER]</a>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         7. DEPOIMENTOS — todos de EXEMPLO até o salão enviar os reais.
+         Nunca publique depoimentos inventados.
+         ========================================================== -->
+    <section class="section alt depoimentos" id="depoimentos" aria-labelledby="depoimentos-titulo">
+      <div class="container">
+        <header class="section-head" data-reveal>
+          <p class="eyebrow">Depoimentos</p>
+          <h2 class="section-title" id="depoimentos-titulo">O que dizem <em>nossas clientes</em></h2>
+        </header>
+
+        <div class="t-carousel" data-placeholder="depoimentos reais de clientes">
+          <div class="t-track" role="region" aria-label="Depoimentos — role para os lados" tabindex="0">
+            <figure class="t-card">
+              <div class="stars" role="img" aria-label="5 de 5 estrelas"><span></span><span></span><span></span><span></span><span></span></div>
+              <blockquote>[PLACEHOLDER: depoimento de cliente real]</blockquote>
+              <figcaption><strong>Cliente Exemplo</strong><span>Coloração · exemplo</span></figcaption>
+            </figure>
+            <figure class="t-card">
+              <div class="stars" role="img" aria-label="5 de 5 estrelas"><span></span><span></span><span></span><span></span><span></span></div>
+              <blockquote>[PLACEHOLDER: depoimento de cliente real]</blockquote>
+              <figcaption><strong>Cliente Exemplo</strong><span>Maquiagem para eventos · exemplo</span></figcaption>
+            </figure>
+            <figure class="t-card">
+              <div class="stars" role="img" aria-label="5 de 5 estrelas"><span></span><span></span><span></span><span></span><span></span></div>
+              <blockquote>[PLACEHOLDER: depoimento de cliente real]</blockquote>
+              <figcaption><strong>Cliente Exemplo</strong><span>Alongamento · exemplo</span></figcaption>
+            </figure>
+            <figure class="t-card">
+              <div class="stars" role="img" aria-label="5 de 5 estrelas"><span></span><span></span><span></span><span></span><span></span></div>
+              <blockquote>[PLACEHOLDER: depoimento de cliente real]</blockquote>
+              <figcaption><strong>Cliente Exemplo</strong><span>Mechas · exemplo</span></figcaption>
+            </figure>
+          </div>
+          <div class="t-controls">
+            <button class="icon-btn t-prev" type="button" aria-label="Depoimento anterior">
+              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </button>
+            <div class="t-dots" aria-hidden="true"></div>
+            <button class="icon-btn t-next" type="button" aria-label="Próximo depoimento">
+              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="center" data-reveal>
+          <!-- Troque href="#" pelo link de avaliação do Google (Perfil da Empresa → "Pedir avaliações") -->
+          <a class="btn btn-primary" href="#" data-google-review data-placeholder="link de avaliação do Google" target="_blank" rel="noopener">
+            Avalie a gente no Google
+          </a>
+          <p class="placeholder-note">[PLACEHOLDER: link de avaliação do Google]</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================
+         8. AGENDAMENTO E CONTATO
+         ========================================================== -->
+    <section class="section contato" id="contato" aria-labelledby="contato-titulo">
+      <div class="container contato-grid">
+        <div class="agenda">
+          <header class="section-head section-head--left" data-reveal>
+            <p class="eyebrow">Agendamento</p>
+            <h2 class="section-title" id="contato-titulo">Agende seu <em>momento.</em></h2>
+            <p class="section-lead">Responda 4 perguntas rápidas e envie tudo pronto pelo WhatsApp.</p>
+          </header>
+
+          <form class="booking" novalidate>
+            <div class="booking-progress" aria-hidden="true"><span class="booking-bar"></span></div>
+            <p class="booking-step-label" aria-live="polite">Etapa <span class="booking-step-num">1</span> de 4</p>
+
+            <fieldset class="booking-step" data-step="1">
+              <legend>Qual serviço você quer?</legend>
+              <p class="booking-hint">Pode escolher mais de um.</p>
+              <div class="choice-grid">
+                <label class="choice"><input type="checkbox" name="servico" value="Cabelo" data-categoria="hair"><span class="choice-box"><span class="choice-title">Cabelo</span><span class="choice-sub">corte, cor, tratamentos</span></span></label>
+                <label class="choice"><input type="checkbox" name="servico" value="Maquiagem" data-categoria="make"><span class="choice-box"><span class="choice-title">Maquiagem</span><span class="choice-sub">social, eventos, sobrancelha</span></span></label>
+                <label class="choice"><input type="checkbox" name="servico" value="Unhas" data-categoria="nail"><span class="choice-box"><span class="choice-title">Unhas</span><span class="choice-sub">mãos, pés, gel, alongamento</span></span></label>
+                <label class="choice"><input type="checkbox" name="servico" value="Ainda não sei" data-exclusivo><span class="choice-box"><span class="choice-title">Ainda não sei</span><span class="choice-sub">quero uma indicação</span></span></label>
+              </div>
+            </fieldset>
+
+            <fieldset class="booking-step" data-step="2" hidden>
+              <legend>Qual dia prefere?</legend>
+              <p class="booking-hint">Próximos 14 dias de atendimento.</p>
+              <div class="days" data-dias></div>
+            </fieldset>
+
+            <fieldset class="booking-step" data-step="3" hidden>
+              <legend>Qual período?</legend>
+              <div class="choice-grid choice-grid--3">
+                <label class="choice"><input type="radio" name="periodo" value="Manhã"><span class="choice-box"><span class="choice-title">Manhã</span></span></label>
+                <label class="choice"><input type="radio" name="periodo" value="Tarde"><span class="choice-box"><span class="choice-title">Tarde</span></span></label>
+                <label class="choice"><input type="radio" name="periodo" value="Noite"><span class="choice-box"><span class="choice-title">Noite</span></span></label>
+              </div>
+            </fieldset>
+
+            <fieldset class="booking-step" data-step="4" hidden>
+              <legend>Para quem é o horário?</legend>
+              <div class="field">
+                <label for="b-nome">Seu nome</label>
+                <input id="b-nome" name="nome" type="text" autocomplete="name" required>
+              </div>
+              <div class="field">
+                <label for="b-whats">Seu WhatsApp</label>
+                <input id="b-whats" name="whatsapp" type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="(61) 90000-0000" required>
+              </div>
+              <label class="check">
+                <input type="checkbox" name="lgpd" required>
+                <span>Concordo em ser contatada pelo salão sobre meu agendamento.</span>
+              </label>
+            </fieldset>
+
+            <p class="booking-error" role="alert"></p>
+
+            <div class="booking-actions">
+              <button class="btn btn-text" type="button" data-voltar hidden>Voltar</button>
+              <button class="btn btn-primary" type="button" data-avancar>Continuar</button>
+              <button class="btn btn-primary" type="submit" data-enviar hidden>Enviar pelo WhatsApp</button>
+            </div>
+            <p class="booking-note">
+              <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              O horário será confirmado pelo salão no WhatsApp, conforme a disponibilidade da agenda.
+            </p>
+          </form>
+        </div>
+
+        <aside class="contato-info" aria-label="Informações de contato">
+          <div class="info-card">
+            <h3>Visite a gente</h3>
+            <ul class="info-list">
+              <li><span class="info-label">Endereço</span>BR 020, Taquari — Brasília/DF<br>CEP 71551-010</li>
+              <li><span class="info-label">Horário</span><span data-placeholder="horário de funcionamento">[PLACEHOLDER: horário de funcionamento]</span></li>
+              <li><span class="info-label">WhatsApp</span><a data-wa="contato" href="https://wa.me/5561984021530" target="_blank" rel="noopener">(61) 98402-1530</a></li>
+              <li><span class="info-label">Instagram</span><a href="https://www.instagram.com/upconceptbeauty/" target="_blank" rel="noopener">@upconceptbeauty</a></li>
+            </ul>
+          </div>
+          <div class="map">
+            <iframe title="Mapa: Up Concept Beauty, BR 020, Taquari, Brasília/DF"
+                    src="https://www.google.com/maps?q=BR%20020%2C%20Taquari%2C%20Bras%C3%ADlia%20-%20DF%2C%2071551-010&amp;output=embed"
+                    width="600" height="420" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+          </div>
+        </aside>
+      </div>
+    </section>
   </main>
+
+  <!-- ==========================================================
+       RODAPÉ
+       ========================================================== -->
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <a class="wordmark wordmark--light" href="#topo" aria-label="Up Concept Beauty — voltar ao topo">
+          <svg class="wordmark-mark" viewBox="-10 -12 330 236" width="64" height="46" aria-hidden="true" focusable="false"><use href="#up-mark"/></svg>
+          <span class="wordmark-concept">Concept</span>
+          <span class="wordmark-beauty">Beauty</span>
+        </a>
+        <p>Beleza • Autoestima • Estilo</p>
+      </div>
+      <nav class="footer-nav" aria-label="Rodapé">
+        <ul>
+          <li><a href="#servicos">Serviços</a></li>
+          <li><a href="#portfolio">Portfólio</a></li>
+          <li><a href="#espaco">O Espaço</a></li>
+          <li><a href="#depoimentos">Depoimentos</a></li>
+          <li><a href="#contato">Contato</a></li>
+        </ul>
+      </nav>
+      <div class="footer-contact">
+        <p>BR 020, Taquari — Brasília/DF</p>
+        <p><a data-wa="rodape" href="https://wa.me/5561984021530" target="_blank" rel="noopener">(61) 98402-1530</a></p>
+        <p><a href="https://www.instagram.com/upconceptbeauty/" target="_blank" rel="noopener">@upconceptbeauty</a></p>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <p>© <span data-ano>2026</span> Up Concept Beauty · CNPJ <span data-placeholder="CNPJ">[PLACEHOLDER]</span></p>
+      <p><a href="#" data-placeholder="link da política de privacidade">Política de privacidade [PLACEHOLDER]</a></p>
+    </div>
+  </footer>
+
+  <!-- Lightbox da galeria -->
+  <dialog class="lightbox" aria-label="Foto ampliada">
+    <button class="lightbox-close icon-btn" type="button" aria-label="Fechar">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </button>
+    <button class="lightbox-prev icon-btn" type="button" aria-label="Foto anterior">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </button>
+    <figure class="lightbox-figure">
+      <img class="lightbox-img" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" alt="" width="800" height="1000">
+      <figcaption class="lightbox-caption"></figcaption>
+    </figure>
+    <button class="lightbox-next icon-btn" type="button" aria-label="Próxima foto">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </button>
+  </dialog>
 
   <!-- ==========================================================
        BOTÃO FLUTUANTE DE WHATSAPP (aparece depois da hero)
