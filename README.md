@@ -46,7 +46,6 @@ assets/video/         coloque aqui o hero.mp4
 | **WhatsApp** | `main.js` → `CONFIG.whatsapp` e `CONFIG.mensagemPadrao`. Todos os links passam pela função `whatsappLink()`. |
 | **Serviços e preços** | Seção `#servicos` no `index.html`. Cada card tem `data-servico="Nome"`, que gera a mensagem do WhatsApp sozinho. |
 | **Dias de atendimento** (calendário do formulário) | `main.js` → `AGENDA.diasFechados` (0 = domingo … 6 = sábado). |
-| **Letreiro (marquee)** | Lista `.marquee-list` no `index.html`. |
 | **GTM / Meta Pixel** | Snippets comentados no `<head>`. Descomente e troque `GTM-[PLACEHOLDER]` e `[PLACEHOLDER: ID do Pixel]`. |
 | **SEO** | `<title>`, `meta description`, Open Graph (`og:image` = `assets/img/og-image.webp`, 1200×630), `canonical` e o JSON-LD `BeautySalon` no `<head>`. Atualize o domínio `www.upconceptbeauty.com.br` se for outro. |
 
@@ -87,12 +86,11 @@ grep -n "PLACEHOLDER" index.html assets/js/main.js
 
 **Serviços**
 - Lista de serviços, descrições, durações e preços (14 cards; todos os preços estão como `[PLACEHOLDER]`). **Validar tudo com o salão.**
-- Itens do letreiro (marquee)
 
 **Mídia**
 - Vídeo da hero (`assets/video/hero.mp4`) e poster (`hero-poster.webp`)
 - Fotos dos painéis Hair, Make e Nail (`panel-*.webp`)
-- 3 pares de antes/depois (`antes-1..3`, `depois-1..3`) + descrições (`PARES_ANTES_DEPOIS` em `main.js`)
+- 3 pares de antes/depois (`antes-1..3`, `depois-1..3`): hoje são **ilustrações de exemplo** (morena iluminada, alinhamento, unhas em gel), marcadas "Exemplo ilustrativo". Troque por fotos reais de clientes, com autorização, e ajuste os títulos em `PARES_ANTES_DEPOIS` (`main.js`)
 - 9 fotos da galeria (`galeria-hair/make/nail-1..3.webp`) + textos alternativos
 - 2 fotos do espaço (`espaco-1/2.webp`)
 - Imagem de compartilhamento (`og-image.webp`)
@@ -113,7 +111,8 @@ grep -n "PLACEHOLDER" index.html assets/js/main.js
 
 - Navegação completa por teclado: menu, abas (setas, Home, End), slider de antes/depois (setas, Shift+setas, Home, End), galeria e lightbox (Esc, setas) e formulário.
 - Foco visível rose gold. Contraste AA nos textos.
-- `prefers-reduced-motion`: sem pin, zoom nem letreiro. A hero mostra o título direto e os painéis ficam estáticos abaixo.
+- `prefers-reduced-motion`: sem pin nem zoom. A hero mostra o título direto e os painéis ficam estáticos abaixo.
 - O vídeo e as animações da hero pausam quando ela sai da tela. Com o vídeo carregado, o fallback animado deixa de ser desenhado.
 - O header só usa blur depois da hero, porque o blur custa caro a cada quadro.
+- No celular (< 768px), os cards de serviço e a galeria viram faixas com swipe e indicadores, para reduzir a rolagem vertical.
 - Lighthouse (mobile, servidor local): Performance 85–87, Acessibilidade 100, Boas práticas 96 (só pelo 404 do vídeo que ainda não existe), SEO 100.

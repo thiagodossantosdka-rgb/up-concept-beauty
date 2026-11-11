@@ -498,40 +498,60 @@
   }
 
   /* ---------------------------------------------------------------------
-     3. FAIXA DE DESTAQUES — letreiro infinito
-     Velocidade varia com a velocidade do scroll; pausa no hover.
+     CARROSSEL NO CELULAR — listas viram uma faixa com swipe (< 768px)
+     O layout é do CSS; aqui ficam os indicadores (pontinhos) e o destaque
+     do item centralizado.
      --------------------------------------------------------------------- */
-  function initMarquee() {
-    var marquee = $('.marquee');
-    if (!marquee || !animar) return;
-    var track = $('.marquee-track', marquee);
-    var lista = $('.marquee-list', track);
-    // Duplica a lista para o loop não ter emenda (cópia escondida de leitores de tela)
-    var copia = lista.cloneNode(true);
-    copia.setAttribute('aria-hidden', 'true');
-    track.appendChild(copia);
+  var mqCelular = window.matchMedia('(max-width: 767px)');
 
-    var loop = gsap.to(track, { xPercent: -50, ease: 'none', duration: 38, repeat: -1 });
-    var base = 1, alvo = 1, hover = false;
+  function carrosselMobile(trilho, seletor, opcoes) {
+    opcoes = opcoes || {};
+    var pontos = document.createElement('div');
+    pontos.className = 'swipe-dots';
+    pontos.setAttribute('aria-hidden', 'true');
+    trilho.insertAdjacentElement('afterend', pontos);
+    var agendado = 0;
 
-    // Acelera levemente conforme a velocidade do scroll e volta ao normal
-    ScrollTrigger.create({
-      trigger: marquee,
-      start: 'top bottom',
-      end: 'bottom top',
-      onUpdate: function (self) {
-        alvo = 1 + Math.min(Math.abs(self.getVelocity()) / 900, 3);
-      },
-      onToggle: function (self) { self.isActive ? loop.resume() : loop.pause(); } // fora da tela não anima
-    });
-    gsap.ticker.add(function () {
-      if (loop.paused()) return;
-      base += ((hover ? 0 : alvo) - base) * 0.08; // no hover desacelera até parar
-      alvo += (1 - alvo) * 0.05;
-      loop.timeScale(Math.max(base, 0.0001));
-    });
-    marquee.addEventListener('mouseenter', function () { hover = true; });
-    marquee.addEventListener('mouseleave', function () { hover = false; });
+    function itens() {
+      return $$(seletor, trilho).filter(function (el) { return !el.classList.contains('is-hidden'); });
+    }
+    function indiceAtual(lista) {
+      if (trilho.scrollLeft + trilho.clientWidth >= trilho.scrollWidth - 4) return lista.length - 1;
+      var r = trilho.getBoundingClientRect();
+      var centro = r.left + r.width / 2, melhor = 0, dist = Infinity;
+      lista.forEach(function (el, i) {
+        var e = el.getBoundingClientRect();
+        var d = Math.abs(e.left + e.width / 2 - centro);
+        if (d < dist) { dist = d; melhor = i; }
+      });
+      return melhor;
+    }
+    function atualizar() {
+      var lista = itens();
+      if (!mqCelular.matches || !lista.length) {
+        lista.forEach(function (el) { el.classList.remove('is-current'); });
+        return;
+      }
+      var i = indiceAtual(lista);
+      $$('span', pontos).forEach(function (sp, k) { sp.classList.toggle('is-active', k === i); });
+      // destaque só no item central visível (limpa também os escondidos pelo filtro)
+      if (opcoes.destaque) $$(seletor, trilho).forEach(function (el) { el.classList.toggle('is-current', el === lista[i]); });
+    }
+    function montar() {
+      pontos.innerHTML = '';
+      itens().forEach(function () { pontos.appendChild(document.createElement('span')); });
+      atualizar();
+    }
+    trilho.addEventListener('scroll', function () {
+      cancelAnimationFrame(agendado);
+      agendado = requestAnimationFrame(atualizar);
+    }, { passive: true });
+    mqCelular.addEventListener('change', montar);
+    montar();
+    return {
+      montar: montar,
+      inicio: function () { trilho.scrollLeft = 0; atualizar(); }
+    };
   }
 
   /* ---------------------------------------------------------------------
@@ -541,6 +561,8 @@
     var abas = $$('.tabs [role="tab"]');
     if (!abas.length) return;
     var indicador = $('.tab-indicator');
+    // No celular os cards de cada aba viram uma faixa com swipe
+    $$('.tab-panel').forEach(function (p) { p._carrossel = carrosselMobile(p, '.service-card'); });
 
     function moverIndicador(aba) {
       if (!indicador) return;
@@ -583,6 +605,7 @@
 
     function mostrar(painel) {
       painel.hidden = false;
+      if (painel._carrossel) painel._carrossel.inicio(); // nova aba começa no primeiro card
       if (!animar) return;
       gsap.fromTo(painel, { autoAlpha: 0, x: 24 }, { autoAlpha: 1, x: 0, duration: 0.45, ease: 'power3.out', clearProps: 'transform' });
       gsap.fromTo($$('.service-card', painel), { autoAlpha: 0, y: 28 },
@@ -619,9 +642,9 @@
      Troque os pares aqui (e as imagens em assets/img/antes-N / depois-N).
      --------------------------------------------------------------------- */
   var PARES_ANTES_DEPOIS = [
-    { antes: 'assets/img/antes-1.webp', depois: 'assets/img/depois-1.webp', titulo: '[PLACEHOLDER: Coloração · descrição]' },
-    { antes: 'assets/img/antes-2.webp', depois: 'assets/img/depois-2.webp', titulo: '[PLACEHOLDER: Mechas · descrição]' },
-    { antes: 'assets/img/antes-3.webp', depois: 'assets/img/depois-3.webp', titulo: '[PLACEHOLDER: Maquiagem · descrição]' }
+    { antes: 'assets/img/antes-1.webp', depois: 'assets/img/depois-1.webp', titulo: 'Exemplo ilustrativo · Morena iluminada' },
+    { antes: 'assets/img/antes-2.webp', depois: 'assets/img/depois-2.webp', titulo: 'Exemplo ilustrativo · Alinhamento e brilho' },
+    { antes: 'assets/img/antes-3.webp', depois: 'assets/img/depois-3.webp', titulo: 'Exemplo ilustrativo · Unhas em gel' }
   ];
 
   function initAntesDepois() {
@@ -707,6 +730,7 @@
     var itens = $$('.gallery-item');
     if (!itens.length) return;
     var filtros = $$('.filter');
+    var carrossel = carrosselMobile($('.gallery'), '.gallery-item', { destaque: true });
 
     filtros.forEach(function (btn) {
       btn.addEventListener('click', function () {
@@ -719,6 +743,8 @@
         function trocar() {
           esconder.forEach(function (it) { it.classList.add('is-hidden'); });
           mostrar.forEach(function (it) { it.classList.remove('is-hidden'); });
+          carrossel.montar();   // pontinhos = fotos visíveis
+          carrossel.inicio();   // volta para a primeira foto do filtro
           if (animar) {
             gsap.fromTo(mostrar, { autoAlpha: 0, y: 20, scale: 0.97 },
               { autoAlpha: 1, y: 0, scale: 1, duration: 0.5, stagger: 0.05, ease: 'power3.out', clearProps: 'all' });
@@ -1020,7 +1046,6 @@
   initHero();
   initHashCategoria();
   initAncoras();
-  initMarquee();
   initServicos();
   initAntesDepois();
   initGaleria();
