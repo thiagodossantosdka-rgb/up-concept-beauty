@@ -92,7 +92,6 @@ grep -n "PLACEHOLDER" index.html assets/js/main.js
 - Fotos dos painéis Hair, Make e Nail (`panel-*.webp`)
 - 3 pares de antes/depois (`antes-1..3`, `depois-1..3`): hoje são **ilustrações de exemplo** (morena iluminada, alinhamento, unhas em gel), marcadas "Exemplo ilustrativo". Troque por fotos reais de clientes, com autorização, e ajuste os títulos em `PARES_ANTES_DEPOIS` (`main.js`)
 - 9 fotos da galeria (`galeria-hair/make/nail-1..3.webp`) + textos alternativos
-- 2 fotos do espaço (`espaco-1/2.webp`)
 - Imagem de compartilhamento (`og-image.webp`)
 - Logo oficial em vetor (hoje recriado a partir de `logo-referencia.png`)
 

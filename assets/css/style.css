@@ -1156,6 +1156,8 @@ html:not(.motion) .site-header { /* sem animação a hero já começa escura: he
   background: var(--rose);
 }
 .arch img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 8 / 11; }
+/* Foto horizontal no arco: enquadra a frase "Sua melhor versão começa aqui" */
+.arch .foto-estacoes { object-position: 62% 40%; }
 .arch::after {
   content: "";
   position: absolute;
