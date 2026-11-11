@@ -173,6 +173,10 @@
       <!-- Trilho do scroll da hero: no celular o palco fica "sticky" aqui dentro
            (rolagem nativa do navegador, sem saltos); no desktop o GSAP fixa a hero -->
       <div class="hero-track">
+        <!-- Pontos de encaixe da rolagem no celular (posicionados por JS) -->
+        <span class="snap-ponto snap-inicio" aria-hidden="true"></span>
+        <span class="snap-ponto snap-titulo" aria-hidden="true"></span>
+        <span class="snap-ponto snap-fim" aria-hidden="true"></span>
       <div class="hero-stage">
 
         <!-- Mídia: vídeo + fallback animado (o fallback fica por baixo e

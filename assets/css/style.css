@@ -395,6 +395,14 @@ html:not(.motion) .site-header { /* sem animação a hero já começa escura: he
 .hero.is-sticky .hero-stage { position: sticky; top: 0; height: 100vh; height: 100lvh; }
 .hero.is-sticky .scroll-hint { bottom: calc(var(--space-6) + 100lvh - 100svh); }
 
+/* Encaixe nativo da rolagem (só no celular, classe .snap-hero no <html> via JS).
+   "proximity": só encaixa quando a rolagem termina perto de um ponto;
+   fora da hero não há pontos, então o resto da página rola livre. */
+html.snap-hero { scroll-snap-type: y proximity; }
+.snap-ponto { position: absolute; left: 0; width: 1px; height: 1px; pointer-events: none; }
+.hero.is-sticky .snap-ponto { scroll-snap-align: start; }
+.hero.is-sticky .snap-titulo { scroll-snap-stop: always; } /* não deixa um arraste rápido passar direto */
+
 .hero-video {
   object-fit: cover;
   opacity: 0;

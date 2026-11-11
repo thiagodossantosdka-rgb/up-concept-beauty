@@ -26,6 +26,8 @@
   if (!temGSAP) root.classList.remove('motion');
   var animar = temGSAP && !reduzMovimento;
   if (temGSAP) gsap.registerPlugin(ScrollTrigger);
+  // Barra do navegador no celular aparecendo/sumindo não recalcula as animações
+  if (temGSAP) ScrollTrigger.config({ ignoreMobileResize: true });
 
   /* Estado compartilhado: categoria que a cliente demonstrou interesse */
   var estado = { categoria: null };
@@ -349,10 +351,9 @@
             start: 'top top',
             end: 'bottom bottom',
             scrub: 0.5,
-            invalidateOnRefresh: true,
-            // Ao soltar o dedo no meio do caminho, desliza suavemente até o
-            // início, o título ou o fim (no sentido em que a pessoa rolava)
-            snap: { snapTo: 'labelsDirectional', duration: { min: 0.25, max: 0.7 }, delay: 0.05, ease: 'power2.inOut' }
+            invalidateOnRefresh: true
+            // Sem snap do GSAP aqui: no iPhone ele briga com a inércia do Safari.
+            // O encaixe é nativo (CSS scroll-snap), ver posicionarPontos() abaixo.
           }
         });
 
@@ -385,30 +386,32 @@
           scrollTrigger: { trigger: '.universes', start: 'top 80%' }
         });
 
-        /* Trava suave no título: mesmo com um arraste rápido, a rolagem para
-           em "Sua beleza, elevada." uma vez. O próximo arraste segue normal.
-           Rearma quando a pessoa volta para o começo da hero. */
+        /* Encaixe e trava NATIVOS (CSS scroll-snap): o próprio navegador para a
+           rolagem no início, em "Sua beleza, elevada." e no fim da hero, sem
+           brigar com a inércia do dedo (era isso que fazia a tela pular no iPhone).
+           O ponto do título tem scroll-snap-stop: always: mesmo num arraste rápido
+           a rolagem para nele antes de seguir. Aqui só posicionamos os pontos. */
         var st = tl.scrollTrigger;
-        var ultimo = window.scrollY, travando = false, jaParou = false;
-        function aoRolar() {
-          var y = window.scrollY;
-          var alvo = st.labelToScroll('titulo');
-          if (!travando && !jaParou && ultimo < alvo - 2 && y > alvo + 2) travar(alvo);
-          if (y < alvo - window.innerHeight * 0.6) jaParou = false;
-          ultimo = y;
+        var pontos = {
+          inicio: $('.snap-inicio', trilho),
+          titulo: $('.snap-titulo', trilho),
+          fim: $('.snap-fim', trilho)
+        };
+        function posicionarPontos() {
+          // o encaixe respeita o scroll-padding-top do <html> (altura do header)
+          var folga = parseFloat(getComputedStyle(root).scrollPaddingTop) || 0;
+          var base = st.start;
+          pontos.inicio.style.top = folga + 'px';
+          pontos.titulo.style.top = (st.labelToScroll('titulo') - base + folga) + 'px';
+          pontos.fim.style.top = (st.end - base + folga) + 'px';
         }
-        function travar(alvo) {
-          travando = true;
-          jaParou = true;
-          root.style.overflow = 'hidden';            // corta a inércia do arraste
-          window.scrollTo({ top: alvo, behavior: 'instant' });
-          setTimeout(function () { root.style.overflow = ''; travando = false; }, 550);
-        }
-        window.addEventListener('scroll', aoRolar, { passive: true });
+        posicionarPontos();
+        ScrollTrigger.addEventListener('refresh', posicionarPontos);
+        root.classList.add('snap-hero');
 
         return function () {
-          window.removeEventListener('scroll', aoRolar);
-          root.style.overflow = '';
+          ScrollTrigger.removeEventListener('refresh', posicionarPontos);
+          root.classList.remove('snap-hero');
           hero.classList.remove('is-sticky');
         };
       });
